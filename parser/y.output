@@ -1,0 +1,451 @@
+
+state 0
+	$accept: .main $end 
+
+	DIGIT  shift 7
+	MONTH  shift 6
+	.  error
+
+	date  goto 2
+	year  goto 3
+	month  goto 4
+	day  goto 5
+	main  goto 1
+
+state 1
+	$accept:  main.$end 
+
+	$end  accept
+	.  error
+
+
+state 2
+	main:  date.    (1)
+
+	.  reduce 1 (src line 60)
+
+
+state 3
+	date:  year.SPACE month SPACE day 
+	date:  year.DIV month DIV day 
+	date:  year.HANYEAR month HANMONTH day HANDAY 
+	date:  year.DASH month DASH day 
+
+	DASH  shift 11
+	DIV  shift 9
+	SPACE  shift 8
+	HANYEAR  shift 10
+	.  error
+
+
+state 4
+	date:  month.DIV day DIV year 
+
+	DIV  shift 12
+	.  error
+
+
+state 5
+	date:  day.SPACE month SPACE year 
+	date:  day.SPACE month SPACE year2 
+
+	SPACE  shift 13
+	.  error
+
+
+state 6
+	date:  MONTH.SPACE day COMMA SPACE year 
+	date:  MONTH.DOT SPACE day COMMA SPACE year 
+	month:  MONTH.    (15)
+
+	DOT  shift 15
+	SPACE  shift 14
+	.  reduce 15 (src line 122)
+
+
+state 7
+	year:  DIGIT.DIGIT DIGIT DIGIT 
+	month:  DIGIT.DIGIT 
+	month:  DIGIT.    (14)
+	day:  DIGIT.DIGIT 
+	day:  DIGIT.    (17)
+
+	DIGIT  shift 16
+	SPACE  reduce 17 (src line 131)
+	.  reduce 14 (src line 118)
+
+
+state 8
+	date:  year SPACE.month SPACE day 
+
+	DIGIT  shift 18
+	MONTH  shift 19
+	.  error
+
+	month  goto 17
+
+state 9
+	date:  year DIV.month DIV day 
+
+	DIGIT  shift 18
+	MONTH  shift 19
+	.  error
+
+	month  goto 20
+
+state 10
+	date:  year HANYEAR.month HANMONTH day HANDAY 
+
+	DIGIT  shift 18
+	MONTH  shift 19
+	.  error
+
+	month  goto 21
+
+state 11
+	date:  year DASH.month DASH day 
+
+	DIGIT  shift 18
+	MONTH  shift 19
+	.  error
+
+	month  goto 22
+
+state 12
+	date:  month DIV.day DIV year 
+
+	DIGIT  shift 24
+	.  error
+
+	day  goto 23
+
+state 13
+	date:  day SPACE.month SPACE year 
+	date:  day SPACE.month SPACE year2 
+
+	DIGIT  shift 18
+	MONTH  shift 19
+	.  error
+
+	month  goto 25
+
+state 14
+	date:  MONTH SPACE.day COMMA SPACE year 
+
+	DIGIT  shift 24
+	.  error
+
+	day  goto 26
+
+state 15
+	date:  MONTH DOT.SPACE day COMMA SPACE year 
+
+	SPACE  shift 27
+	.  error
+
+
+state 16
+	year:  DIGIT DIGIT.DIGIT DIGIT 
+	month:  DIGIT DIGIT.    (13)
+	day:  DIGIT DIGIT.    (16)
+
+	DIGIT  shift 28
+	SPACE  reduce 16 (src line 127)
+	.  reduce 13 (src line 114)
+
+
+state 17
+	date:  year SPACE month.SPACE day 
+
+	SPACE  shift 29
+	.  error
+
+
+state 18
+	month:  DIGIT.DIGIT 
+	month:  DIGIT.    (14)
+
+	DIGIT  shift 30
+	.  reduce 14 (src line 118)
+
+
+state 19
+	month:  MONTH.    (15)
+
+	.  reduce 15 (src line 122)
+
+
+state 20
+	date:  year DIV month.DIV day 
+
+	DIV  shift 31
+	.  error
+
+
+state 21
+	date:  year HANYEAR month.HANMONTH day HANDAY 
+
+	HANMONTH  shift 32
+	.  error
+
+
+state 22
+	date:  year DASH month.DASH day 
+
+	DASH  shift 33
+	.  error
+
+
+state 23
+	date:  month DIV day.DIV year 
+
+	DIV  shift 34
+	.  error
+
+
+state 24
+	day:  DIGIT.DIGIT 
+	day:  DIGIT.    (17)
+
+	DIGIT  shift 35
+	.  reduce 17 (src line 131)
+
+
+state 25
+	date:  day SPACE month.SPACE year 
+	date:  day SPACE month.SPACE year2 
+
+	SPACE  shift 36
+	.  error
+
+
+state 26
+	date:  MONTH SPACE day.COMMA SPACE year 
+
+	COMMA  shift 37
+	.  error
+
+
+state 27
+	date:  MONTH DOT SPACE.day COMMA SPACE year 
+
+	DIGIT  shift 24
+	.  error
+
+	day  goto 38
+
+state 28
+	year:  DIGIT DIGIT DIGIT.DIGIT 
+
+	DIGIT  shift 39
+	.  error
+
+
+state 29
+	date:  year SPACE month SPACE.day 
+
+	DIGIT  shift 24
+	.  error
+
+	day  goto 40
+
+state 30
+	month:  DIGIT DIGIT.    (13)
+
+	.  reduce 13 (src line 114)
+
+
+state 31
+	date:  year DIV month DIV.day 
+
+	DIGIT  shift 24
+	.  error
+
+	day  goto 41
+
+state 32
+	date:  year HANYEAR month HANMONTH.day HANDAY 
+
+	DIGIT  shift 24
+	.  error
+
+	day  goto 42
+
+state 33
+	date:  year DASH month DASH.day 
+
+	DIGIT  shift 24
+	.  error
+
+	day  goto 43
+
+state 34
+	date:  month DIV day DIV.year 
+
+	DIGIT  shift 45
+	.  error
+
+	year  goto 44
+
+state 35
+	day:  DIGIT DIGIT.    (16)
+
+	.  reduce 16 (src line 127)
+
+
+state 36
+	date:  day SPACE month SPACE.year 
+	date:  day SPACE month SPACE.year2 
+
+	DIGIT  shift 48
+	.  error
+
+	year  goto 46
+	year2  goto 47
+
+state 37
+	date:  MONTH SPACE day COMMA.SPACE year 
+
+	SPACE  shift 49
+	.  error
+
+
+state 38
+	date:  MONTH DOT SPACE day.COMMA SPACE year 
+
+	COMMA  shift 50
+	.  error
+
+
+state 39
+	year:  DIGIT DIGIT DIGIT DIGIT.    (11)
+
+	.  reduce 11 (src line 104)
+
+
+state 40
+	date:  year SPACE month SPACE day.    (2)
+
+	.  reduce 2 (src line 65)
+
+
+state 41
+	date:  year DIV month DIV day.    (3)
+
+	.  reduce 3 (src line 69)
+
+
+state 42
+	date:  year HANYEAR month HANMONTH day.HANDAY 
+
+	HANDAY  shift 51
+	.  error
+
+
+state 43
+	date:  year DASH month DASH day.    (6)
+
+	.  reduce 6 (src line 81)
+
+
+state 44
+	date:  month DIV day DIV year.    (5)
+
+	.  reduce 5 (src line 77)
+
+
+state 45
+	year:  DIGIT.DIGIT DIGIT DIGIT 
+
+	DIGIT  shift 52
+	.  error
+
+
+state 46
+	date:  day SPACE month SPACE year.    (7)
+
+	.  reduce 7 (src line 85)
+
+
+state 47
+	date:  day SPACE month SPACE year2.    (8)
+
+	.  reduce 8 (src line 89)
+
+
+state 48
+	year:  DIGIT.DIGIT DIGIT DIGIT 
+	year2:  DIGIT.DIGIT 
+
+	DIGIT  shift 53
+	.  error
+
+
+state 49
+	date:  MONTH SPACE day COMMA SPACE.year 
+
+	DIGIT  shift 45
+	.  error
+
+	year  goto 54
+
+state 50
+	date:  MONTH DOT SPACE day COMMA.SPACE year 
+
+	SPACE  shift 55
+	.  error
+
+
+state 51
+	date:  year HANYEAR month HANMONTH day HANDAY.    (4)
+
+	.  reduce 4 (src line 73)
+
+
+state 52
+	year:  DIGIT DIGIT.DIGIT DIGIT 
+
+	DIGIT  shift 28
+	.  error
+
+
+state 53
+	year:  DIGIT DIGIT.DIGIT DIGIT 
+	year2:  DIGIT DIGIT.    (12)
+
+	DIGIT  shift 28
+	.  reduce 12 (src line 109)
+
+
+state 54
+	date:  MONTH SPACE day COMMA SPACE year.    (9)
+
+	.  reduce 9 (src line 93)
+
+
+state 55
+	date:  MONTH DOT SPACE day COMMA SPACE.year 
+
+	DIGIT  shift 45
+	.  error
+
+	year  goto 56
+
+state 56
+	date:  MONTH DOT SPACE day COMMA SPACE year.    (10)
+
+	.  reduce 10 (src line 98)
+
+
+42 terminals, 7 nonterminals
+18 grammar rules, 57/8000 states
+0 shift/reduce, 0 reduce/reduce conflicts reported
+56 working sets used
+memory: parser 21/120000
+4 extra closures
+52 shift entries, 3 exceptions
+22 goto entries
+0 entries saved by goto default
+Optimizer space used: output 57/120000
+57 table entries, 1 zero
+maximum spread: 17, maximum offset: 55
