@@ -13,7 +13,7 @@ var testDate = []struct {
 }{
 	{
 		input: "2021 10 1",
-		expected: &Date{
+		expected: &DateTime{
 			Year: 2021,
     		Month: 10,
     		Day: 1,
@@ -21,7 +21,7 @@ var testDate = []struct {
 	},
 	{
 		input: "2011 1 10",
-		expected: &Date{
+		expected: &DateTime{
 			Year: 2011,
     		Month: 1,
     		Day: 10,
@@ -29,7 +29,7 @@ var testDate = []struct {
 	},
 	{
 		input: "1970 01 01",
-		expected: &Date{
+		expected: &DateTime{
 			Year: 1970,
     		Month: 1,
     		Day: 1,
@@ -37,7 +37,7 @@ var testDate = []struct {
 	},
 	{
 		input: "1971 10 10",
-		expected: &Date{
+		expected: &DateTime{
 			Year: 1971,
     		Month: 10,
     		Day: 10,
@@ -45,7 +45,7 @@ var testDate = []struct {
 	},
 	{
 		input: "2010/10/10",
-		expected: &Date{
+		expected: &DateTime{
 			Year: 2010,
     		Month: 10,
     		Day: 10,
@@ -53,7 +53,7 @@ var testDate = []struct {
 	},
 	{
 		input: "2010-1-1",
-		expected: &Date{
+		expected: &DateTime{
 			Year: 2010,
     		Month: 1,
     		Day: 1,
@@ -61,7 +61,7 @@ var testDate = []struct {
 	},
 	{
 		input: "2021-Feb-1",
-		expected: &Date{
+		expected: &DateTime{
 			Year: 2021,
     		Month: 2,
     		Day: 1,
@@ -69,7 +69,7 @@ var testDate = []struct {
 	},
 	{
 		input: "oct 7, 2021",
-		expected: &Date{
+		expected: &DateTime{
 			Year: 2021,
     		Month: 10,
     		Day: 7,
@@ -77,7 +77,7 @@ var testDate = []struct {
 	},
 	{
 		input: "oct 7, 2021",
-		expected: &Date{
+		expected: &DateTime{
 			Year: 2021,
     		Month: 10,
     		Day: 7,
@@ -85,7 +85,7 @@ var testDate = []struct {
 	},
 	{
 		input: "Oct. 7, 2021",
-		expected: &Date{
+		expected: &DateTime{
 			Year: 2021,
     		Month: 10,
     		Day: 7,
@@ -93,7 +93,7 @@ var testDate = []struct {
 	},
 	{
 		input: "7 oct 1970",
-		expected: &Date{
+		expected: &DateTime{
 			Year: 1970,
     		Month: 10,
     		Day: 7,
@@ -101,7 +101,7 @@ var testDate = []struct {
 	},
 	{
 		input: "7 oct 70",
-		expected: &Date{
+		expected: &DateTime{
 			Year: 1970,
     		Month: 10,
     		Day: 7,
@@ -109,7 +109,7 @@ var testDate = []struct {
 	},
 	{
 		input: "2021年7月1日",
-		expected: &Date{
+		expected: &DateTime{
 			Year: 2021,
     		Month: 7,
     		Day: 1,

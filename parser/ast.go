@@ -16,8 +16,13 @@ type Node interface {
 }
 
 type DateTime struct {
-    Date *Date
-    Time *Time
+    Year int
+    Month int
+    Day int
+    Hour int
+    Minute int
+    Second int
+    Millisecond int
 }
 
 func (d *DateTime) Print() string {
@@ -35,11 +40,11 @@ type Date struct {
 }
 
 func (d *Date) Print() string {
-	return ""
+    return ""
 }
 
 func (d *Date) PositionRange() *PositionRange {
-	return nil
+    return nil
 }
 
 type Time struct {
@@ -50,11 +55,11 @@ type Time struct {
 }
 
 func (t *Time) Print() string {
-	return ""
+    return ""
 }
 
 func (t *Time) PositionRange() *PositionRange {
-	return nil
+    return nil
 }
 
 type Year int

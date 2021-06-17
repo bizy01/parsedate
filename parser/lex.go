@@ -46,7 +46,7 @@ var keyWords = map[string]TokenType {
 }
 
 // Parse parses the input and returs the result.
-func ParseDate(input string) (Node, error) {
+func ParseDate(input string) (*DateTime, error) {
     l := newLexer(input)
     yyParse(l)
     return l.Result, l.err
@@ -64,7 +64,7 @@ type Lexer struct {
     tmpToken *Token
     scanned bool
     lastPos Pos
-    Result Node
+    Result *DateTime
     err    error
 }
 
