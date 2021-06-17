@@ -12,42 +12,71 @@
 
 #### 日期格式
 
-- oct 7, 1970
-- May 17, 2012
-- oct 7, '70
-- Oct 7, '70
-- Oct. 7, '70
-- oct. 7, '70
-- oct. 7, 1970
-- 7 oct 70
-- 7 oct 1970
-- 7 September 1970
-- September 17, 2012
-- 03 Jul 2017
-- 03-Jul-15
-- 03-Jul 2015
-- 3-Jul-15
-- 3 Jan 2021
-- 2014年04月08日
-- 03/31/2014
-- 3/31/2014
-- 3/5/2014
-- 08/08/71
-- 8/8/71
-- 2014/04/02
-...
-
-#### 时间格式
-
-todo
+```
+    {in: "10:20:30", out: 1623896430},
+	{in: "2021-1-1", out: 1609430400},
+	{in: "2021-1-1 10:20:30", out: 1609467630},
+	{in: "2021-01-01 10:20:30", out: 1609467630},
+	{in: "oct 7, 1970 10:20:30", out: 24114030},
+	{in: "oct. 7, 1970 10:20:30", out: 24114030},
+	{in: "sept. 7, 1970 10:20:30", out: 21522030},
+	{in: "sept. 7, 1970 10:20:30", out: 21522030},
+	{in: "sept. 7, 1970 10:20:30", out: 21522030},
+	{in: "7 oct 70", out: 24076800},
+	{in: "7 oct 1970", out: 24076800},
+	{in: "7 oct 1970", out: 24076800},
+	{in: "03 February 2013", out: 1359820800},
+	{in: "2021年10月1日", out: 1633017600},
+	{in: "03/31/2014", out: 1396195200},
+	{in: "2021/04/02", out: 1617292800},
+```
 
 ### 使用
-todo
+
+```
+type dateTest struct {
+	in           string
+	out          int64
+	err          bool
+}
+
+var testInputs = []dateTest{
+	{in: "10:20:30", out: 1623896430},
+	{in: "2021-1-1", out: 1609430400},
+	{in: "2021-1-1 10:20:30", out: 1609467630},
+	{in: "2021-01-01 10:20:30", out: 1609467630},
+	{in: "oct 7, 1970 10:20:30", out: 24114030},
+	{in: "oct. 7, 1970 10:20:30", out: 24114030},
+	{in: "sept. 7, 1970 10:20:30", out: 21522030},
+	{in: "sept. 7, 1970 10:20:30", out: 21522030},
+	{in: "sept. 7, 1970 10:20:30", out: 21522030},
+	{in: "7 oct 70", out: 24076800},
+	{in: "7 oct 1970", out: 24076800},
+	{in: "7 oct 1970", out: 24076800},
+	{in: "03 February 2013", out: 1359820800},
+	{in: "2021年10月1日", out: 1633017600},
+	{in: "03/31/2014", out: 1396195200},
+	{in: "2021/04/02", out: 1617292800},
+}
+
+func TestParse(t *testing.T) {
+	for i, th := range testInputs {
+		expected, err := Timestamp(th.in)
+		if err != nil {
+			t.Log(err)
+			continue
+		}
+
+		require.Equal(t, th.out, expected, "%d: input %q", i, th.in)
+	}
+}
+```
 
 ### demo
 todo
 
 ## 参考
-[dateparse](https://github.com/araddon/dateparse)
-[promql](https://github.com/prometheus/prometheus/tree/main/promql/parser)
+
+- [dateparse](https://github.com/araddon/dateparse)
+- [promql](https://github.com/prometheus/prometheus/tree/main/promql/parser)
 
