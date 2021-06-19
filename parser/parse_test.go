@@ -115,11 +115,53 @@ var testDate = []struct {
     		Day: 1,
 		},
 	},
+	{
+		input: "2020-01-01 10:10:10.123456",
+		expected: &DateTime{
+			Year: 2021,
+    		Month: 1,
+    		Day: 1,
+    		Hour: 10,
+    		Minute: 10,
+    		Second: 10,
+    		Millisecond: 123456,
+		},
+		fail: true,
+	},
+	{
+		input: "2021",
+		expected: &DateTime{
+			Year: 2021,
+    		Month: 0,
+    		Day: 0,
+		},
+		fail: true,
+	},
 }
 
 func TestParserDateTime(t *testing.T) {
 	for i, test := range testDate {
 		out, err := ParseDate(test.input)
+
+		if test.fail {
+			hasError := false
+
+			if err != nil {
+				hasError = true
+			}
+
+			if !hasError {
+				t.Logf("%d: input %q", i, test.input)
+				t.Fatalf("expected parse error but did not fail")
+			}
+			continue
+		}
+
+		if err != nil {
+			t.Logf("%d: input %q", i, test.input)
+			t.Fatalf("unexpected parse error %v", err)
+		}
+
 		require.NotEqual(t, err, errUnexpected, "unexpected error occurred")
 
 		require.Equal(t, test.expected, out, "%d: input %q", i, test.input)

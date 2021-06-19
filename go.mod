@@ -1,4 +1,4 @@
-module parsedate
+module github.com/bizy01/parsedate
 
 go 1.14
 

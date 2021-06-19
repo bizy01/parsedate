@@ -24,31 +24,6 @@ const MONTH = 57356
 const HANYEAR = 57357
 const HANMONTH = 57358
 const HANDAY = 57359
-const keywordsStart = 57360
-const JANUARY = 57361
-const JAN = 57362
-const FEBRUARY = 57363
-const FEB = 57364
-const MARCH = 57365
-const MAR = 57366
-const APRIL = 57367
-const APR = 57368
-const MAY = 57369
-const JUNE = 57370
-const JUN = 57371
-const JULY = 57372
-const JUL = 57373
-const AUGUST = 57374
-const AUG = 57375
-const SEPTEMBER = 57376
-const SEPT = 57377
-const OCTOBER = 57378
-const OCT = 57379
-const NOVEMBER = 57380
-const NOV = 57381
-const DECEMBER = 57382
-const DEC = 57383
-const keywordsEnd = 57384
 
 var yyToknames = [...]string{
 	"$end",
@@ -68,31 +43,6 @@ var yyToknames = [...]string{
 	"HANYEAR",
 	"HANMONTH",
 	"HANDAY",
-	"keywordsStart",
-	"JANUARY",
-	"JAN",
-	"FEBRUARY",
-	"FEB",
-	"MARCH",
-	"MAR",
-	"APRIL",
-	"APR",
-	"MAY",
-	"JUNE",
-	"JUN",
-	"JULY",
-	"JUL",
-	"AUGUST",
-	"AUG",
-	"SEPTEMBER",
-	"SEPT",
-	"OCTOBER",
-	"OCT",
-	"NOVEMBER",
-	"NOV",
-	"DECEMBER",
-	"DEC",
-	"keywordsEnd",
 }
 
 var yyStatenames = [...]string{}
@@ -105,79 +55,84 @@ var yyExca = [...]int{
 	-1, 1,
 	1, -1,
 	-2, 0,
-	-1, 10,
-	9, 23,
+	-1, 11,
+	9, 25,
+	13, 21,
+	-2, 18,
+	-1, 22,
+	9, 24,
 	13, 20,
 	-2, 17,
-	-1, 21,
-	9, 22,
-	13, 19,
-	-2, 16,
 }
 
 const yyPrivate = 57344
 
-const yyLast = 71
+const yyLast = 80
 
 var yyAct = [...]int{
-	5, 6, 15, 13, 65, 42, 7, 69, 61, 46,
-	39, 12, 34, 14, 24, 27, 28, 29, 17, 32,
-	25, 10, 19, 30, 11, 33, 4, 26, 8, 18,
-	62, 47, 49, 20, 57, 37, 70, 67, 22, 66,
-	64, 48, 60, 31, 51, 56, 52, 58, 53, 54,
-	55, 50, 45, 40, 38, 36, 23, 21, 44, 41,
-	16, 43, 68, 1, 63, 35, 9, 59, 3, 2,
-	71,
+	6, 7, 16, 14, 66, 43, 8, 3, 70, 62,
+	47, 13, 11, 15, 26, 25, 28, 29, 30, 9,
+	33, 27, 20, 40, 31, 35, 34, 18, 12, 19,
+	5, 63, 48, 71, 50, 21, 80, 79, 78, 77,
+	76, 75, 49, 23, 58, 38, 57, 53, 59, 54,
+	55, 56, 72, 68, 67, 65, 61, 32, 52, 51,
+	46, 41, 39, 69, 37, 24, 22, 45, 42, 17,
+	44, 73, 1, 74, 64, 36, 10, 60, 4, 2,
 }
 
 var yyPact = [...]int{
-	14, -1000, -1000, 11, -1000, -2, 55, 5, 16, 24,
-	50, 49, 13, 13, 13, 13, 36, 13, 36, -1,
-	48, 28, -1000, 47, -3, 46, -1000, 54, -11, 57,
-	53, 45, -4, 21, 36, 23, 44, 37, -1000, 36,
-	-1000, 36, 36, 36, 27, -1000, 35, -5, 20, 33,
-	-1000, -1000, -1000, -1000, -13, -1000, -1000, 32, -1000, -1000,
-	30, 27, -6, -1000, 29, -1000, 28, 28, -1000, 27,
-	-1000, -1000,
+	5, -1000, -1000, -1000, 15, -1000, -2, 64, 14, 16,
+	26, 59, 58, 7, 7, 7, 7, 50, 7, 50,
+	12, 57, 38, -1000, 55, 10, 54, -1000, 63, -11,
+	66, 62, 53, -3, 22, 50, 25, 52, 51, -1000,
+	50, -1000, 50, 50, 50, 37, -1000, 49, -4, 21,
+	48, -1000, -1000, -1000, -1000, -13, -1000, -1000, 47, -1000,
+	-1000, 46, 37, -5, 24, 45, -1000, 38, 38, -1000,
+	37, 34, -1000, -1000, -1000, 33, 32, 31, 30, 29,
+	-1000,
 }
 
 var yyPgo = [...]int{
-	0, 69, 68, 0, 1, 6, 67, 26, 66, 65,
-	64, 63,
+	0, 79, 78, 0, 1, 6, 77, 30, 76, 75,
+	74, 73, 72,
 }
 
 var yyR1 = [...]int{
-	0, 11, 1, 1, 1, 2, 2, 2, 2, 2,
-	2, 2, 2, 2, 3, 6, 4, 4, 4, 5,
-	5, 7, 8, 8, 9, 9, 10, 10,
+	0, 12, 12, 1, 1, 1, 2, 2, 2, 2,
+	2, 2, 2, 2, 2, 3, 6, 4, 4, 4,
+	5, 5, 7, 7, 8, 8, 9, 9, 10, 10,
+	11, 11, 11, 11, 11, 11,
 }
 
 var yyR2 = [...]int{
-	0, 1, 1, 1, 3, 5, 5, 6, 5, 5,
-	5, 5, 6, 7, 4, 2, 2, 1, 1, 2,
-	1, 5, 2, 1, 2, 1, 2, 1,
+	0, 1, 1, 1, 1, 3, 5, 5, 6, 5,
+	5, 5, 5, 6, 7, 4, 2, 2, 1, 1,
+	2, 1, 5, 7, 2, 1, 2, 1, 2, 1,
+	1, 2, 3, 4, 5, 6,
 }
 
 var yyChk = [...]int{
-	-1000, -11, -1, -2, -7, -3, -4, -5, 14, -8,
-	7, 13, 13, 5, 15, 4, 5, 13, 13, 6,
-	9, 7, -7, 7, -4, 7, 14, -4, -4, -4,
-	-5, 7, -4, -5, 13, -9, 7, 7, 7, 13,
-	7, 5, 16, 4, 5, 7, 13, 10, -5, 9,
-	7, 7, -5, -5, -5, -5, -3, 7, -3, -6,
-	7, 13, 10, -10, 7, 17, 7, 7, -3, 13,
-	7, -3,
+	-1000, -12, -1, 2, -2, -7, -3, -4, -5, 14,
+	-8, 7, 13, 13, 5, 15, 4, 5, 13, 13,
+	6, 9, 7, -7, 7, -4, 7, 14, -4, -4,
+	-4, -5, 7, -4, -5, 13, -9, 7, 7, 7,
+	13, 7, 5, 16, 4, 5, 7, 13, 10, -5,
+	9, 7, 7, -5, -5, -5, -5, -3, 7, -3,
+	-6, 7, 13, 10, -10, 7, 17, 7, 7, -3,
+	13, 9, 7, -3, -11, 7, 7, 7, 7, 7,
+	7,
 }
 
 var yyDef = [...]int{
-	0, -2, 1, 2, 3, 0, 0, 0, 18, 0,
-	-2, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, -2, 4, 23, 0, 17, 18, 0, 0, 0,
-	0, 20, 0, 0, 0, 0, 25, 0, 22, 0,
-	16, 0, 0, 0, 0, 19, 0, 0, 0, 0,
-	24, 14, 5, 6, 0, 9, 8, 0, 10, 11,
-	0, 0, 0, 21, 27, 7, 0, 15, 12, 0,
-	26, 13,
+	0, -2, 1, 2, 3, 4, 0, 0, 0, 19,
+	0, -2, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, -2, 5, 25, 0, 18, 19, 0, 0,
+	0, 0, 21, 0, 0, 0, 0, 27, 0, 24,
+	0, 17, 0, 0, 0, 0, 20, 0, 0, 0,
+	0, 26, 15, 6, 7, 0, 10, 9, 0, 11,
+	12, 0, 0, 0, 22, 29, 8, 0, 16, 13,
+	0, 0, 28, 14, 23, 30, 31, 32, 33, 34,
+	35,
 }
 
 var yyTok1 = [...]int{
@@ -186,10 +141,7 @@ var yyTok1 = [...]int{
 
 var yyTok2 = [...]int{
 	2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
-	12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-	22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-	32, 33, 34, 35, 36, 37, 38, 39, 40, 41,
-	42,
+	12, 13, 14, 15, 16, 17,
 }
 
 var yyTok3 = [...]int{
@@ -539,26 +491,26 @@ yydefault:
 	case 2:
 		yyDollar = yyS[yypt-1 : yypt+1]
 		{
+			yylex.(*Lexer).unexpected("parse error...", "")
+		}
+	case 3:
+		yyDollar = yyS[yypt-1 : yypt+1]
+		{
 			y := yyDollar[1].node.(*Date)
 			yyVAL.datetime = &DateTime{Year: y.Year, Month: y.Month, Day: y.Day}
 		}
-	case 3:
+	case 4:
 		yyDollar = yyS[yypt-1 : yypt+1]
 		{
 			t := yyDollar[1].node.(*Time)
 			yyVAL.datetime = &DateTime{Hour: t.Hour, Minute: t.Minute, Second: t.Second}
 		}
-	case 4:
+	case 5:
 		yyDollar = yyS[yypt-3 : yypt+1]
 		{
 			y := yyDollar[1].node.(*Date)
 			t := yyDollar[3].node.(*Time)
 			yyVAL.datetime = &DateTime{Year: y.Year, Month: y.Month, Day: y.Day, Hour: t.Hour, Minute: t.Minute, Second: t.Second}
-		}
-	case 5:
-		yyDollar = yyS[yypt-5 : yypt+1]
-		{
-			yyVAL.node = &Date{Year: int(yyDollar[1].node.(Year)), Month: int(yyDollar[3].node.(Month)), Day: int(yyDollar[5].node.(Day))}
 		}
 	case 6:
 		yyDollar = yyS[yypt-5 : yypt+1]
@@ -566,24 +518,24 @@ yydefault:
 			yyVAL.node = &Date{Year: int(yyDollar[1].node.(Year)), Month: int(yyDollar[3].node.(Month)), Day: int(yyDollar[5].node.(Day))}
 		}
 	case 7:
-		yyDollar = yyS[yypt-6 : yypt+1]
+		yyDollar = yyS[yypt-5 : yypt+1]
 		{
 			yyVAL.node = &Date{Year: int(yyDollar[1].node.(Year)), Month: int(yyDollar[3].node.(Month)), Day: int(yyDollar[5].node.(Day))}
 		}
 	case 8:
-		yyDollar = yyS[yypt-5 : yypt+1]
+		yyDollar = yyS[yypt-6 : yypt+1]
 		{
-			yyVAL.node = &Date{Year: int(yyDollar[5].node.(Year)), Month: int(yyDollar[1].node.(Month)), Day: int(yyDollar[3].node.(Day))}
+			yyVAL.node = &Date{Year: int(yyDollar[1].node.(Year)), Month: int(yyDollar[3].node.(Month)), Day: int(yyDollar[5].node.(Day))}
 		}
 	case 9:
 		yyDollar = yyS[yypt-5 : yypt+1]
 		{
-			yyVAL.node = &Date{Year: int(yyDollar[1].node.(Year)), Month: int(yyDollar[3].node.(Month)), Day: int(yyDollar[5].node.(Day))}
+			yyVAL.node = &Date{Year: int(yyDollar[5].node.(Year)), Month: int(yyDollar[1].node.(Month)), Day: int(yyDollar[3].node.(Day))}
 		}
 	case 10:
 		yyDollar = yyS[yypt-5 : yypt+1]
 		{
-			yyVAL.node = &Date{Year: int(yyDollar[5].node.(Year)), Month: int(yyDollar[3].node.(Month)), Day: int(yyDollar[1].node.(Day))}
+			yyVAL.node = &Date{Year: int(yyDollar[1].node.(Year)), Month: int(yyDollar[3].node.(Month)), Day: int(yyDollar[5].node.(Day))}
 		}
 	case 11:
 		yyDollar = yyS[yypt-5 : yypt+1]
@@ -591,86 +543,126 @@ yydefault:
 			yyVAL.node = &Date{Year: int(yyDollar[5].node.(Year)), Month: int(yyDollar[3].node.(Month)), Day: int(yyDollar[1].node.(Day))}
 		}
 	case 12:
+		yyDollar = yyS[yypt-5 : yypt+1]
+		{
+			yyVAL.node = &Date{Year: int(yyDollar[5].node.(Year)), Month: int(yyDollar[3].node.(Month)), Day: int(yyDollar[1].node.(Day))}
+		}
+	case 13:
 		yyDollar = yyS[yypt-6 : yypt+1]
 		{
 			var m = ConvToManth(yyDollar[1].item.Val)
 			yyVAL.node = &Date{Year: int(yyDollar[6].node.(Year)), Month: int(m), Day: int(yyDollar[3].node.(Day))}
 		}
-	case 13:
+	case 14:
 		yyDollar = yyS[yypt-7 : yypt+1]
 		{
 			var m = ConvToManth(yyDollar[1].item.Val)
 			yyVAL.node = &Date{Year: int(yyDollar[7].node.(Year)), Month: int(m), Day: int(yyDollar[4].node.(Day))}
 		}
-	case 14:
+	case 15:
 		yyDollar = yyS[yypt-4 : yypt+1]
 		{
 			yyVAL.node = JoinYear(yyDollar[1].item, yyDollar[2].item, yyDollar[3].item, yyDollar[4].item)
 		}
-	case 15:
+	case 16:
 		yyDollar = yyS[yypt-2 : yypt+1]
 		{
 			yyVAL.node = JoinYear(yyDollar[1].item, yyDollar[2].item)
 		}
-	case 16:
+	case 17:
 		yyDollar = yyS[yypt-2 : yypt+1]
 		{
 			yyVAL.node = JoinMonth(yyDollar[1].item, yyDollar[2].item)
 		}
-	case 17:
+	case 18:
 		yyDollar = yyS[yypt-1 : yypt+1]
 		{
 			yyVAL.node = JoinMonth(yyDollar[1].item)
 		}
-	case 18:
+	case 19:
 		yyDollar = yyS[yypt-1 : yypt+1]
 		{
 			yyVAL.node = ConvToManth(yyDollar[1].item.Val)
 		}
-	case 19:
+	case 20:
 		yyDollar = yyS[yypt-2 : yypt+1]
 		{
 			yyVAL.node = JoinDay(yyDollar[1].item, yyDollar[2].item)
 		}
-	case 20:
+	case 21:
 		yyDollar = yyS[yypt-1 : yypt+1]
 		{
 			yyVAL.node = JoinDay(yyDollar[1].item)
 		}
-	case 21:
+	case 22:
 		yyDollar = yyS[yypt-5 : yypt+1]
 		{
 			yyVAL.node = &Time{Hour: int(yyDollar[1].node.(Hour)), Minute: int(yyDollar[3].node.(Minute)), Second: int(yyDollar[5].node.(Second))}
 		}
-	case 22:
-		yyDollar = yyS[yypt-2 : yypt+1]
-		{
-			yyVAL.node = JoinHour(yyDollar[1].item, yyDollar[2].item)
-		}
 	case 23:
-		yyDollar = yyS[yypt-1 : yypt+1]
+		yyDollar = yyS[yypt-7 : yypt+1]
 		{
-			yyVAL.node = JoinHour(yyDollar[1].item)
+			yyVAL.node = &Time{Hour: int(yyDollar[1].node.(Hour)), Minute: int(yyDollar[3].node.(Minute)), Second: int(yyDollar[5].node.(Second)), Millisecond: int(yyDollar[7].node.(Millisecond))}
 		}
 	case 24:
 		yyDollar = yyS[yypt-2 : yypt+1]
 		{
-			yyVAL.node = JoinMinute(yyDollar[1].item, yyDollar[2].item)
+			yyVAL.node = JoinHour(yyDollar[1].item, yyDollar[2].item)
 		}
 	case 25:
 		yyDollar = yyS[yypt-1 : yypt+1]
 		{
-			yyVAL.node = JoinMinute(yyDollar[1].item)
+			yyVAL.node = JoinHour(yyDollar[1].item)
 		}
 	case 26:
 		yyDollar = yyS[yypt-2 : yypt+1]
 		{
-			yyVAL.node = JoinSecond(yyDollar[1].item, yyDollar[2].item)
+			yyVAL.node = JoinMinute(yyDollar[1].item, yyDollar[2].item)
 		}
 	case 27:
 		yyDollar = yyS[yypt-1 : yypt+1]
 		{
+			yyVAL.node = JoinMinute(yyDollar[1].item)
+		}
+	case 28:
+		yyDollar = yyS[yypt-2 : yypt+1]
+		{
+			yyVAL.node = JoinSecond(yyDollar[1].item, yyDollar[2].item)
+		}
+	case 29:
+		yyDollar = yyS[yypt-1 : yypt+1]
+		{
 			yyVAL.node = JoinSecond(yyDollar[1].item)
+		}
+	case 30:
+		yyDollar = yyS[yypt-1 : yypt+1]
+		{
+			yyVAL.node = JoinMillisecond(yyDollar[1].item)
+		}
+	case 31:
+		yyDollar = yyS[yypt-2 : yypt+1]
+		{
+			yyVAL.node = JoinMillisecond(yyDollar[1].item, yyDollar[2].item)
+		}
+	case 32:
+		yyDollar = yyS[yypt-3 : yypt+1]
+		{
+			yyVAL.node = JoinMillisecond(yyDollar[1].item, yyDollar[2].item, yyDollar[3].item)
+		}
+	case 33:
+		yyDollar = yyS[yypt-4 : yypt+1]
+		{
+			yyVAL.node = JoinMillisecond(yyDollar[1].item, yyDollar[2].item, yyDollar[3].item, yyDollar[4].item)
+		}
+	case 34:
+		yyDollar = yyS[yypt-5 : yypt+1]
+		{
+			yyVAL.node = JoinMillisecond(yyDollar[1].item, yyDollar[2].item, yyDollar[3].item, yyDollar[4].item, yyDollar[5].item)
+		}
+	case 35:
+		yyDollar = yyS[yypt-6 : yypt+1]
+		{
+			yyVAL.node = JoinMillisecond(yyDollar[1].item, yyDollar[2].item, yyDollar[3].item, yyDollar[4].item, yyDollar[5].item, yyDollar[6].item)
 		}
 	}
 	goto yystack /* stack new state and value */

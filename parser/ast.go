@@ -183,6 +183,25 @@ func (s Second) PositionRange() *PositionRange{
 	return nil
 }
 
+type Millisecond int
+
+func JoinMillisecond(tokens ...Token) Millisecond {
+    var out string
+    for _, token := range tokens {
+        out += token.Val
+    }
+
+    return Millisecond(cast.ToInt(out))
+}
+
+func (s Millisecond) Print() string {
+    return ""
+}
+
+func (s Millisecond) PositionRange() *PositionRange{
+    return nil
+}
+
 var monthWords = map[string]int {
     "january":      1,
     "february":     2,

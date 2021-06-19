@@ -24,36 +24,8 @@ HANYEAR
 HANMONTH
 HANDAY
 
-// Keywords
-%token	keywordsStart
-%token <item>
-JANUARY
-JAN
-FEBRUARY
-FEB
-MARCH
-MAR
-APRIL
-APR
-MAY
-JUNE
-JUN
-JULY
-JUL
-AUGUST
-AUG
-SEPTEMBER
-SEPT
-OCTOBER
-OCT
-NOVEMBER
-NOV
-DECEMBER
-DEC
-%token keywordsEnd
-
 %type <datetime> datetime
-%type <node>  date year month day year2 time hour minute second
+%type <node>  date year month day year2 time hour minute second millisecond
 %type <item> DIGIT
 
 %start main
@@ -62,6 +34,10 @@ DEC
 main: datetime
   {
     yylex.(*Lexer).Result = $1
+  }
+| error
+  {
+    yylex.(*Lexer).unexpected("parse error...", "")
   }
 
 datetime: date
@@ -156,6 +132,11 @@ time: hour COLON minute COLON second
   {
     $$ = &Time{Hour: int($1.(Hour)), Minute: int($3.(Minute)), Second: int($5.(Second))}
   }
+| hour COLON minute COLON second COLON millisecond
+  {
+    $$ = &Time{Hour: int($1.(Hour)), Minute: int($3.(Minute)), Second: int($5.(Second)), Millisecond: int($7.(Millisecond))}
+  }
+
 
 hour: DIGIT DIGIT
   {
@@ -182,4 +163,29 @@ second: DIGIT DIGIT
 | DIGIT
   {
     $$ = JoinSecond($1)
+  }
+
+millisecond: DIGIT
+  {
+    $$ = JoinMillisecond($1)
+  }
+| DIGIT DIGIT
+  {
+    $$ = JoinMillisecond($1, $2)
+  }
+| DIGIT DIGIT DIGIT
+  {
+    $$ = JoinMillisecond($1, $2, $3)
+  }
+| DIGIT DIGIT DIGIT DIGIT
+  {
+    $$ = JoinMillisecond($1, $2, $3, $4)
+  }
+| DIGIT DIGIT DIGIT DIGIT DIGIT
+  {
+    $$ = JoinMillisecond($1, $2, $3, $4, $5)
+  }
+| DIGIT DIGIT DIGIT DIGIT DIGIT DIGIT
+  {
+    $$ = JoinMillisecond($1, $2, $3, $4, $5, $6)
   }

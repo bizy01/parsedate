@@ -10,6 +10,46 @@ import (
 var errUnexpected = errors.New("unexpected error")
 var eof rune = -1
 
+type ParseErr struct {
+    PositionRange PositionRange
+    Err           error
+    Input         string
+    LineOffset    int
+}
+
+func (e *ParseErr) Error() string {
+    pos := int(e.PositionRange.Start)
+    lastLineBreak := -1
+    line := e.LineOffset + 1
+
+    var positionStr string
+
+    if pos < 0 || pos > len(e.Input) {
+        positionStr = "invalid position:"
+    } else {
+
+        for i, c := range e.Input[:pos] {
+            if c == '\n' {
+                lastLineBreak = i
+                line++
+            }
+        }
+
+        col := pos - lastLineBreak
+        positionStr = fmt.Sprintf("%d:%d:", line, col)
+    }
+    return fmt.Sprintf("%s parse error: %s", positionStr, e.Err)
+}
+
+type ParseErrors []ParseErr
+
+func (errs ParseErrors) Error() string {
+    if len(errs) != 0 {
+        return errs[0].Error()
+    }
+    return "error contains no error message"
+}
+
 type TokenType int
 type Pos int
 
@@ -19,37 +59,43 @@ type Token struct {
     Val string
 }
 
-var keyWords = map[string]TokenType {
-    "january":      JANUARY,
-    "february":     FEBRUARY,
-    "march":        MARCH,
-    "april":        APRIL,
-    "may":          MAY,
-    "june":         JUNE,
-    "july":         JULY,
-    "august":       AUGUST,
-    "september":    SEPTEMBER,
-    "october":      OCTOBER,
-    "november":     NOVEMBER,
-    "december":     DECEMBER,
-    "jan":          JANUARY,
-    "feb":          FEBRUARY,
-    "mar":          MARCH,
-    "apr":          APRIL,
-    "jun":          JUNE,
-    "jul":          JULY,
-    "aug":          AUGUST,
-    "sept":         SEPTEMBER,
-    "oct":          OCTOBER,
-    "nov":          NOVEMBER,
-    "dec":          DECEMBER,
+var keyWords = map[string]int {
+    "january":      1,
+    "february":     2,
+    "march":        3,
+    "april":        4,
+    "may":          5,
+    "june":         6,
+    "july":         7,
+    "august":       8,
+    "september":    9,
+    "october":      10,
+    "november":     11,
+    "december":     12,
+    "jan":          1,
+    "feb":          2,
+    "mar":          3,
+    "apr":          4,
+    "jun":          6,
+    "jul":          7,
+    "aug":          8,
+    "sept":         9,
+    "oct":          10,
+    "nov":          11,
+    "dec":          12,
 }
 
 // Parse parses the input and returs the result.
 func ParseDate(input string) (*DateTime, error) {
+    var err error
     l := newLexer(input)
     yyParse(l)
-    return l.Result, l.err
+
+    if len(l.parseErrors) != 0 {
+        err = l.parseErrors
+    }
+
+    return l.Result, err
 }
 
 // 状态机
@@ -65,7 +111,7 @@ type Lexer struct {
     scanned bool
     lastPos Pos
     Result *DateTime
-    err    error
+    parseErrors ParseErrors
 }
 
 func newLexer(input string) *Lexer {
@@ -132,6 +178,39 @@ Loop:
     return lexStatements
 }
 
+func (l *Lexer) unexpected(context string, expected string) {
+    var errMsg strings.Builder
+
+    // Do not report lexer errors twice
+    if l.tmpToken.Typ == ERROR {
+        return
+    }
+
+    errMsg.WriteString("unexpected ")
+
+    if context != "" {
+        errMsg.WriteString(" in ")
+        errMsg.WriteString(context)
+    }
+
+    if expected != "" {
+        errMsg.WriteString(", expected ")
+        errMsg.WriteString(expected)
+    }
+
+    l.addParseErr(PositionRange{}, errors.New(errMsg.String()))
+}
+
+func (l *Lexer) addParseErr(positionRange PositionRange, err error) {
+    perr := ParseErr{
+        PositionRange: positionRange,
+        Err:           err,
+        Input:         l.input,
+    }
+
+    l.parseErrors = append(l.parseErrors, perr)
+}
+
 func (l *Lexer) errorf(format string, args ...interface{}) stateFn {
     *l.tmpToken = Token{ERROR, l.start, fmt.Sprintf(format, args...)}
     l.scanned = true
@@ -190,6 +269,13 @@ func (l *Lexer) Lex(lval *yySymType) int {
 
     switch typ {
     case ERROR:
+        pos := PositionRange{
+            Start: l.start,
+            End:   Pos(len(l.input)),
+        }
+
+        l.addParseErr(pos, errors.New(lval.item.Val))
+
         return 0
     case EOF:
         return 0
@@ -215,7 +301,6 @@ func (l *Lexer) NextItem(itemp *Token) {
 
 // Error satisfies yyLexer.
 func (l *Lexer) Error(s string) {
-    l.err = errors.New(s)
 }
 
 func isSpace(r rune) bool {
