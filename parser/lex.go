@@ -59,7 +59,7 @@ type Token struct {
     Val string
 }
 
-var keyWords = map[string]int {
+var monthWords = map[string]int {
     "january":      1,
     "february":     2,
     "march":        3,
@@ -83,6 +83,27 @@ var keyWords = map[string]int {
     "oct":          10,
     "nov":          11,
     "dec":          12,
+}
+
+var weekWords = map[string]int {
+    mon: 1,
+    tue: 2,
+    wed: 3,
+    thur: 4,
+    fri: 5,
+    sat: 6,
+    sun: 0,
+    monday: 1,
+    tuesday: 2,
+    wednesday: 3,
+    thursday: 4,
+    friday: 5,
+    saturday: 6,
+    sunday: 0,
+}
+
+var zoneWords = map[string]int {
+    gmt: 1,
 }
 
 // Parse parses the input and returs the result.
@@ -166,9 +187,14 @@ Loop:
         default:
             l.back()
             word := l.input[l.start:l.pos]
-            if _, ok := keyWords[strings.ToLower(word)]; ok {
-                // 英文数字转换(todo)
+            if _, ok := monthWords[strings.ToLower(word)]; ok {
                 l.emit(MONTH)
+                break Loop
+            } else if _, ok := weekWords[strings.ToLower(word)]; ok {
+                l.emit(WEEK)
+                break Loop
+            } else if _, ok := zoneWords[strings.ToLower(word)]; ok {
+                l.emit(ZONE)
                 break Loop
             } else {
                 return l.errorf("unexpected key word: %s", word)
