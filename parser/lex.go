@@ -27,7 +27,6 @@ func (e *ParseErr) Error() string {
     if pos < 0 || pos > len(e.Input) {
         positionStr = "invalid position:"
     } else {
-
         for i, c := range e.Input[:pos] {
             if c == '\n' {
                 lastLineBreak = i
@@ -38,7 +37,7 @@ func (e *ParseErr) Error() string {
         col := pos - lastLineBreak
         positionStr = fmt.Sprintf("%d:%d:", line, col)
     }
-    return fmt.Sprintf("%s parse error: %s", positionStr, e.Err)
+    return fmt.Sprintf("parse error: (%s) ,%s", positionStr, e.Err)
 }
 
 type ParseErrors []ParseErr
@@ -86,24 +85,25 @@ var monthWords = map[string]int {
 }
 
 var weekWords = map[string]int {
-    mon: 1,
-    tue: 2,
-    wed: 3,
-    thur: 4,
-    fri: 5,
-    sat: 6,
-    sun: 0,
-    monday: 1,
-    tuesday: 2,
-    wednesday: 3,
-    thursday: 4,
-    friday: 5,
-    saturday: 6,
-    sunday: 0,
+    "mon": 1,
+    "tue": 2,
+    "wed": 3,
+    "thur": 4,
+    "fri": 5,
+    "sat": 6,
+    "sun": 0,
+    "monday": 1,
+    "tuesday": 2,
+    "wednesday": 3,
+    "thursday": 4,
+    "friday": 5,
+    "saturday": 6,
+    "sunday": 0,
 }
 
 var zoneWords = map[string]int {
-    gmt: 1,
+    "gmt": 1,
+    "mst": 2,
 }
 
 // Parse parses the input and returs the result.
@@ -152,6 +152,8 @@ func lexStatements(l *Lexer) stateFn {
             l.emit(SPACE)
         case r == '-':
             l.emit(DASH)
+        case r == '+':
+            l.emit(PLUS)
         case r == ':':
             l.emit(COLON)
         case r == '/':
@@ -195,6 +197,18 @@ Loop:
                 break Loop
             } else if _, ok := zoneWords[strings.ToLower(word)]; ok {
                 l.emit(ZONE)
+                break Loop
+            } else if "AM" == word {
+                l.emit(T)
+                break Loop
+            } else if "PM" == word {
+                l.emit(T)
+                break Loop
+            } else if "T" == word {
+                l.emit(T)
+                break Loop
+            } else if "Z" == word {
+                l.emit(Z)
                 break Loop
             } else {
                 return l.errorf("unexpected key word: %s", word)

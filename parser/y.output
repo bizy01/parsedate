@@ -2,18 +2,23 @@
 state 0
 	$accept: .main $end 
 
-	error  shift 3
-	DIGIT  shift 11
-	MONTH  shift 9
+	error  shift 10
+	DIGIT  shift 14
+	SPACE  shift 15
+	WEEK  shift 11
 	.  error
 
-	datetime  goto 2
-	date  goto 4
-	year  goto 6
-	month  goto 7
-	day  goto 8
-	time  goto 5
-	hour  goto 10
+	ansic  goto 2
+	unixdate  goto 3
+	rubydate  goto 4
+	rfc822  goto 5
+	rfc822z  goto 6
+	rfc850  goto 7
+	rfc1123  goto 8
+	rfc3339  goto 9
+	date  goto 13
+	year4  goto 16
+	day  goto 12
 	main  goto 1
 
 state 1
@@ -24,626 +29,1063 @@ state 1
 
 
 state 2
-	main:  datetime.    (1)
+	main:  ansic.    (1)
 
-	.  reduce 1 (src line 34)
+	.  reduce 1 (src line 41)
 
 
 state 3
-	main:  error.    (2)
+	main:  unixdate.    (2)
 
-	.  reduce 2 (src line 38)
+	.  reduce 2 (src line 45)
 
 
 state 4
-	datetime:  date.    (3)
-	datetime:  date.SPACE time 
+	main:  rubydate.    (3)
 
-	SPACE  shift 12
-	.  reduce 3 (src line 43)
+	.  reduce 3 (src line 49)
 
 
 state 5
-	datetime:  time.    (4)
+	main:  rfc822.    (4)
 
-	.  reduce 4 (src line 48)
+	.  reduce 4 (src line 53)
 
 
 state 6
-	date:  year.SPACE month SPACE day 
-	date:  year.DIV month DIV day 
-	date:  year.HANYEAR month HANMONTH day HANDAY 
-	date:  year.DASH month DASH day 
+	main:  rfc822z.    (5)
 
-	DASH  shift 16
-	DIV  shift 14
-	SPACE  shift 13
-	HANYEAR  shift 15
-	.  error
+	.  reduce 5 (src line 57)
 
 
 state 7
-	date:  month.DIV day DIV year 
+	main:  rfc850.    (6)
 
-	DIV  shift 17
-	.  error
+	.  reduce 6 (src line 61)
 
 
 state 8
-	date:  day.SPACE month SPACE year 
-	date:  day.SPACE month SPACE year2 
+	main:  rfc1123.$$7 rfc1123z 
+	$$7: .    (7)
 
+	.  reduce 7 (src line 65)
+
+	$$7  goto 17
+
+state 9
+	main:  rfc3339.    (9)
+
+	.  reduce 9 (src line 73)
+
+
+state 10
+	main:  error.    (10)
+
+	.  reduce 10 (src line 77)
+
+
+state 11
+	ansic:  WEEK.SPACE MONTH SPACE day SPACE time SPACE year4 
+	unixdate:  WEEK.SPACE MONTH SPACE day SPACE time SPACE ZONE SPACE year4 
+	rubydate:  WEEK.SPACE MONTH SPACE day SPACE time SPACE offest SPACE year4 
+	rfc850:  WEEK.COMMA SPACE day DASH MONTH DASH year2 SPACE time SPACE ZONE 
+	rfc1123:  WEEK.COMMA SPACE day SPACE MONTH SPACE year4 SPACE time SPACE ZONE 
+
+	COMMA  shift 19
 	SPACE  shift 18
 	.  error
 
 
-state 9
-	date:  MONTH.SPACE day COMMA SPACE year 
-	date:  MONTH.DOT SPACE day COMMA SPACE year 
-	month:  MONTH.    (19)
-
-	DOT  shift 20
-	SPACE  shift 19
-	.  reduce 19 (src line 117)
-
-
-state 10
-	time:  hour.COLON minute COLON second 
-	time:  hour.COLON minute COLON second COLON millisecond 
-
-	COLON  shift 21
-	.  error
-
-
-state 11
-	year:  DIGIT.DIGIT DIGIT DIGIT 
-	month:  DIGIT.DIGIT 
-	month:  DIGIT.    (18)
-	day:  DIGIT.DIGIT 
-	day:  DIGIT.    (21)
-	hour:  DIGIT.DIGIT 
-	hour:  DIGIT.    (25)
-
-	DIGIT  shift 22
-	COLON  reduce 25 (src line 145)
-	SPACE  reduce 21 (src line 126)
-	.  reduce 18 (src line 113)
-
-
 state 12
-	datetime:  date SPACE.time 
+	rfc822:  day.SPACE MONTH SPACE year2 SPACE time SPACE ZONE 
+	rfc822z:  day.SPACE MONTH SPACE year2 SPACE time SPACE offest 
 
-	DIGIT  shift 24
+	SPACE  shift 20
 	.  error
 
-	time  goto 23
-	hour  goto 10
 
 state 13
-	date:  year SPACE.month SPACE day 
+	rfc3339:  date.T time Z offest 
 
-	DIGIT  shift 26
-	MONTH  shift 27
+	T  shift 21
 	.  error
 
-	month  goto 25
 
 state 14
-	date:  year DIV.month DIV day 
+	year4:  DIGIT.DIGIT DIGIT DIGIT 
+	day:  DIGIT.DIGIT 
+	day:  DIGIT.    (26)
 
-	DIGIT  shift 26
-	MONTH  shift 27
-	.  error
+	DIGIT  shift 22
+	.  reduce 26 (src line 182)
 
-	month  goto 28
 
 state 15
-	date:  year HANYEAR.month HANMONTH day HANDAY 
+	day:  SPACE.DIGIT 
 
-	DIGIT  shift 26
-	MONTH  shift 27
+	DIGIT  shift 23
 	.  error
 
-	month  goto 29
 
 state 16
-	date:  year DASH.month DASH day 
+	date:  year4.DASH month DASH day 
 
-	DIGIT  shift 26
-	MONTH  shift 27
+	DASH  shift 24
 	.  error
 
-	month  goto 30
 
 state 17
-	date:  month DIV.day DIV year 
+	main:  rfc1123 $$7.rfc1123z 
 
-	DIGIT  shift 32
+	WEEK  shift 26
 	.  error
 
-	day  goto 31
+	rfc1123z  goto 25
 
 state 18
-	date:  day SPACE.month SPACE year 
-	date:  day SPACE.month SPACE year2 
+	ansic:  WEEK SPACE.MONTH SPACE day SPACE time SPACE year4 
+	unixdate:  WEEK SPACE.MONTH SPACE day SPACE time SPACE ZONE SPACE year4 
+	rubydate:  WEEK SPACE.MONTH SPACE day SPACE time SPACE offest SPACE year4 
 
-	DIGIT  shift 26
 	MONTH  shift 27
 	.  error
 
-	month  goto 33
 
 state 19
-	date:  MONTH SPACE.day COMMA SPACE year 
+	rfc850:  WEEK COMMA.SPACE day DASH MONTH DASH year2 SPACE time SPACE ZONE 
+	rfc1123:  WEEK COMMA.SPACE day SPACE MONTH SPACE year4 SPACE time SPACE ZONE 
 
-	DIGIT  shift 32
+	SPACE  shift 28
 	.  error
 
-	day  goto 34
 
 state 20
-	date:  MONTH DOT.SPACE day COMMA SPACE year 
+	rfc822:  day SPACE.MONTH SPACE year2 SPACE time SPACE ZONE 
+	rfc822z:  day SPACE.MONTH SPACE year2 SPACE time SPACE offest 
 
-	SPACE  shift 35
+	MONTH  shift 29
 	.  error
 
 
 state 21
-	time:  hour COLON.minute COLON second 
-	time:  hour COLON.minute COLON second COLON millisecond 
+	rfc3339:  date T.time Z offest 
 
-	DIGIT  shift 37
+	DIGIT  shift 32
 	.  error
 
-	minute  goto 36
+	time  goto 30
+	hour  goto 31
 
 state 22
-	year:  DIGIT DIGIT.DIGIT DIGIT 
-	month:  DIGIT DIGIT.    (17)
-	day:  DIGIT DIGIT.    (20)
-	hour:  DIGIT DIGIT.    (24)
+	year4:  DIGIT DIGIT.DIGIT DIGIT 
+	day:  DIGIT DIGIT.    (24)
 
-	DIGIT  shift 38
-	COLON  reduce 24 (src line 141)
-	SPACE  reduce 20 (src line 122)
-	.  reduce 17 (src line 109)
+	DIGIT  shift 33
+	.  reduce 24 (src line 174)
 
 
 state 23
-	datetime:  date SPACE time.    (5)
+	day:  SPACE DIGIT.    (25)
 
-	.  reduce 5 (src line 53)
+	.  reduce 25 (src line 178)
 
 
 state 24
-	hour:  DIGIT.DIGIT 
-	hour:  DIGIT.    (25)
+	date:  year4 DASH.month DASH day 
 
-	DIGIT  shift 39
-	.  reduce 25 (src line 145)
+	DIGIT  shift 35
+	.  error
 
+	month  goto 34
 
 state 25
-	date:  year SPACE month.SPACE day 
+	main:  rfc1123 $$7 rfc1123z.    (8)
+
+	.  reduce 8 (src line 69)
+
+
+state 26
+	rfc1123z:  WEEK.COMMA SPACE day SPACE MONTH SPACE year4 SPACE time SPACE offest 
+
+	COMMA  shift 36
+	.  error
+
+
+state 27
+	ansic:  WEEK SPACE MONTH.SPACE day SPACE time SPACE year4 
+	unixdate:  WEEK SPACE MONTH.SPACE day SPACE time SPACE ZONE SPACE year4 
+	rubydate:  WEEK SPACE MONTH.SPACE day SPACE time SPACE offest SPACE year4 
+
+	SPACE  shift 37
+	.  error
+
+
+state 28
+	rfc850:  WEEK COMMA SPACE.day DASH MONTH DASH year2 SPACE time SPACE ZONE 
+	rfc1123:  WEEK COMMA SPACE.day SPACE MONTH SPACE year4 SPACE time SPACE ZONE 
+
+	DIGIT  shift 39
+	SPACE  shift 15
+	.  error
+
+	day  goto 38
+
+state 29
+	rfc822:  day SPACE MONTH.SPACE year2 SPACE time SPACE ZONE 
+	rfc822z:  day SPACE MONTH.SPACE year2 SPACE time SPACE offest 
 
 	SPACE  shift 40
 	.  error
 
 
-state 26
-	month:  DIGIT.DIGIT 
-	month:  DIGIT.    (18)
-
-	DIGIT  shift 41
-	.  reduce 18 (src line 113)
-
-
-state 27
-	month:  MONTH.    (19)
-
-	.  reduce 19 (src line 117)
-
-
-state 28
-	date:  year DIV month.DIV day 
-
-	DIV  shift 42
-	.  error
-
-
-state 29
-	date:  year HANYEAR month.HANMONTH day HANDAY 
-
-	HANMONTH  shift 43
-	.  error
-
-
 state 30
-	date:  year DASH month.DASH day 
+	rfc3339:  date T time.Z offest 
 
-	DASH  shift 44
+	Z  shift 41
 	.  error
 
 
 state 31
-	date:  month DIV day.DIV year 
+	time:  hour.COLON minute 
+	time:  hour.COLON minute COLON second 
+	time:  hour.COLON minute COLON second DOT millisecond 
 
-	DIV  shift 45
+	COLON  shift 42
 	.  error
 
 
 state 32
-	day:  DIGIT.DIGIT 
-	day:  DIGIT.    (21)
+	hour:  DIGIT.DIGIT 
+	hour:  DIGIT.    (38)
 
-	DIGIT  shift 46
-	.  reduce 21 (src line 126)
+	DIGIT  shift 43
+	.  reduce 38 (src line 227)
 
 
 state 33
-	date:  day SPACE month.SPACE year 
-	date:  day SPACE month.SPACE year2 
+	year4:  DIGIT DIGIT DIGIT.DIGIT 
+
+	DIGIT  shift 44
+	.  error
+
+
+state 34
+	date:  year4 DASH month.DASH day 
+
+	DASH  shift 45
+	.  error
+
+
+state 35
+	month:  DIGIT.DIGIT 
+
+	DIGIT  shift 46
+	.  error
+
+
+state 36
+	rfc1123z:  WEEK COMMA.SPACE day SPACE MONTH SPACE year4 SPACE time SPACE offest 
 
 	SPACE  shift 47
 	.  error
 
 
-state 34
-	date:  MONTH SPACE day.COMMA SPACE year 
-
-	COMMA  shift 48
-	.  error
-
-
-state 35
-	date:  MONTH DOT SPACE.day COMMA SPACE year 
-
-	DIGIT  shift 32
-	.  error
-
-	day  goto 49
-
-state 36
-	time:  hour COLON minute.COLON second 
-	time:  hour COLON minute.COLON second COLON millisecond 
-
-	COLON  shift 50
-	.  error
-
-
 state 37
-	minute:  DIGIT.DIGIT 
-	minute:  DIGIT.    (27)
+	ansic:  WEEK SPACE MONTH SPACE.day SPACE time SPACE year4 
+	unixdate:  WEEK SPACE MONTH SPACE.day SPACE time SPACE ZONE SPACE year4 
+	rubydate:  WEEK SPACE MONTH SPACE.day SPACE time SPACE offest SPACE year4 
 
-	DIGIT  shift 51
-	.  reduce 27 (src line 154)
+	DIGIT  shift 39
+	SPACE  shift 15
+	.  error
 
+	day  goto 48
 
 state 38
-	year:  DIGIT DIGIT DIGIT.DIGIT 
+	rfc850:  WEEK COMMA SPACE day.DASH MONTH DASH year2 SPACE time SPACE ZONE 
+	rfc1123:  WEEK COMMA SPACE day.SPACE MONTH SPACE year4 SPACE time SPACE ZONE 
 
-	DIGIT  shift 52
+	DASH  shift 49
+	SPACE  shift 50
 	.  error
 
 
 state 39
-	hour:  DIGIT DIGIT.    (24)
+	day:  DIGIT.DIGIT 
+	day:  DIGIT.    (26)
 
-	.  reduce 24 (src line 141)
+	DIGIT  shift 51
+	.  reduce 26 (src line 182)
 
 
 state 40
-	date:  year SPACE month SPACE.day 
+	rfc822:  day SPACE MONTH SPACE.year2 SPACE time SPACE ZONE 
+	rfc822z:  day SPACE MONTH SPACE.year2 SPACE time SPACE offest 
 
-	DIGIT  shift 32
+	DIGIT  shift 53
 	.  error
 
-	day  goto 53
+	year2  goto 52
 
 state 41
-	month:  DIGIT DIGIT.    (17)
+	rfc3339:  date T time Z.offest 
 
-	.  reduce 17 (src line 109)
+	DASH  shift 56
+	DIGIT  shift 57
+	PLUS  shift 55
+	.  error
 
+	offest  goto 54
 
 state 42
-	date:  year DIV month DIV.day 
+	time:  hour COLON.minute 
+	time:  hour COLON.minute COLON second 
+	time:  hour COLON.minute COLON second DOT millisecond 
 
-	DIGIT  shift 32
+	DIGIT  shift 59
 	.  error
 
-	day  goto 54
+	minute  goto 58
 
 state 43
-	date:  year HANYEAR month HANMONTH.day HANDAY 
+	hour:  DIGIT DIGIT.    (37)
 
-	DIGIT  shift 32
-	.  error
+	.  reduce 37 (src line 223)
 
-	day  goto 55
 
 state 44
-	date:  year DASH month DASH.day 
+	year4:  DIGIT DIGIT DIGIT DIGIT.    (21)
 
-	DIGIT  shift 32
-	.  error
+	.  reduce 21 (src line 159)
 
-	day  goto 56
 
 state 45
-	date:  month DIV day DIV.year 
+	date:  year4 DASH month DASH.day 
 
-	DIGIT  shift 58
+	DIGIT  shift 39
+	SPACE  shift 15
 	.  error
 
-	year  goto 57
+	day  goto 60
 
 state 46
-	day:  DIGIT DIGIT.    (20)
+	month:  DIGIT DIGIT.    (23)
 
-	.  reduce 20 (src line 122)
+	.  reduce 23 (src line 169)
 
 
 state 47
-	date:  day SPACE month SPACE.year 
-	date:  day SPACE month SPACE.year2 
+	rfc1123z:  WEEK COMMA SPACE.day SPACE MONTH SPACE year4 SPACE time SPACE offest 
 
-	DIGIT  shift 61
+	DIGIT  shift 39
+	SPACE  shift 15
 	.  error
 
-	year  goto 59
-	year2  goto 60
+	day  goto 61
 
 state 48
-	date:  MONTH SPACE day COMMA.SPACE year 
+	ansic:  WEEK SPACE MONTH SPACE day.SPACE time SPACE year4 
+	unixdate:  WEEK SPACE MONTH SPACE day.SPACE time SPACE ZONE SPACE year4 
+	rubydate:  WEEK SPACE MONTH SPACE day.SPACE time SPACE offest SPACE year4 
 
 	SPACE  shift 62
 	.  error
 
 
 state 49
-	date:  MONTH DOT SPACE day.COMMA SPACE year 
+	rfc850:  WEEK COMMA SPACE day DASH.MONTH DASH year2 SPACE time SPACE ZONE 
 
-	COMMA  shift 63
+	MONTH  shift 63
 	.  error
 
 
 state 50
-	time:  hour COLON minute COLON.second 
-	time:  hour COLON minute COLON.second COLON millisecond 
+	rfc1123:  WEEK COMMA SPACE day SPACE.MONTH SPACE year4 SPACE time SPACE ZONE 
 
-	DIGIT  shift 65
+	MONTH  shift 64
 	.  error
 
-	second  goto 64
 
 state 51
-	minute:  DIGIT DIGIT.    (26)
+	day:  DIGIT DIGIT.    (24)
 
-	.  reduce 26 (src line 150)
+	.  reduce 24 (src line 174)
 
 
 state 52
-	year:  DIGIT DIGIT DIGIT DIGIT.    (15)
+	rfc822:  day SPACE MONTH SPACE year2.SPACE time SPACE ZONE 
+	rfc822z:  day SPACE MONTH SPACE year2.SPACE time SPACE offest 
 
-	.  reduce 15 (src line 99)
-
-
-state 53
-	date:  year SPACE month SPACE day.    (6)
-
-	.  reduce 6 (src line 60)
-
-
-state 54
-	date:  year DIV month DIV day.    (7)
-
-	.  reduce 7 (src line 64)
-
-
-state 55
-	date:  year HANYEAR month HANMONTH day.HANDAY 
-
-	HANDAY  shift 66
+	SPACE  shift 65
 	.  error
 
 
-state 56
-	date:  year DASH month DASH day.    (10)
+state 53
+	year2:  DIGIT.DIGIT 
 
-	.  reduce 10 (src line 76)
-
-
-state 57
-	date:  month DIV day DIV year.    (9)
-
-	.  reduce 9 (src line 72)
+	DIGIT  shift 66
+	.  error
 
 
-state 58
-	year:  DIGIT.DIGIT DIGIT DIGIT 
+state 54
+	rfc3339:  date T time Z offest.    (19)
+
+	.  reduce 19 (src line 147)
+
+
+state 55
+	offest:  PLUS.DIGIT DIGIT DIGIT DIGIT 
+	offest:  PLUS.DIGIT DIGIT COLON DIGIT DIGIT 
+	offest:  PLUS.DIGIT DIGIT 
 
 	DIGIT  shift 67
 	.  error
 
 
-state 59
-	date:  day SPACE month SPACE year.    (11)
-
-	.  reduce 11 (src line 80)
-
-
-state 60
-	date:  day SPACE month SPACE year2.    (12)
-
-	.  reduce 12 (src line 84)
-
-
-state 61
-	year:  DIGIT.DIGIT DIGIT DIGIT 
-	year2:  DIGIT.DIGIT 
+state 56
+	offest:  DASH.DIGIT DIGIT DIGIT DIGIT 
+	offest:  DASH.DIGIT DIGIT COLON DIGIT DIGIT 
+	offest:  DASH.DIGIT DIGIT 
 
 	DIGIT  shift 68
 	.  error
 
 
-state 62
-	date:  MONTH SPACE day COMMA SPACE.year 
+state 57
+	offest:  DIGIT.DIGIT COLON DIGIT DIGIT 
 
-	DIGIT  shift 58
+	DIGIT  shift 69
 	.  error
 
-	year  goto 69
+
+state 58
+	time:  hour COLON minute.    (27)
+	time:  hour COLON minute.COLON second 
+	time:  hour COLON minute.COLON second DOT millisecond 
+
+	COLON  shift 70
+	.  reduce 27 (src line 187)
+
+
+state 59
+	minute:  DIGIT.DIGIT 
+	minute:  DIGIT.    (40)
+
+	DIGIT  shift 71
+	.  reduce 40 (src line 236)
+
+
+state 60
+	date:  year4 DASH month DASH day.    (20)
+
+	.  reduce 20 (src line 154)
+
+
+state 61
+	rfc1123z:  WEEK COMMA SPACE day.SPACE MONTH SPACE year4 SPACE time SPACE offest 
+
+	SPACE  shift 72
+	.  error
+
+
+state 62
+	ansic:  WEEK SPACE MONTH SPACE day SPACE.time SPACE year4 
+	unixdate:  WEEK SPACE MONTH SPACE day SPACE.time SPACE ZONE SPACE year4 
+	rubydate:  WEEK SPACE MONTH SPACE day SPACE.time SPACE offest SPACE year4 
+
+	DIGIT  shift 32
+	.  error
+
+	time  goto 73
+	hour  goto 31
 
 state 63
-	date:  MONTH DOT SPACE day COMMA.SPACE year 
+	rfc850:  WEEK COMMA SPACE day DASH MONTH.DASH year2 SPACE time SPACE ZONE 
 
-	SPACE  shift 70
+	DASH  shift 74
 	.  error
 
 
 state 64
-	time:  hour COLON minute COLON second.    (22)
-	time:  hour COLON minute COLON second.COLON millisecond 
+	rfc1123:  WEEK COMMA SPACE day SPACE MONTH.SPACE year4 SPACE time SPACE ZONE 
 
-	COLON  shift 71
-	.  reduce 22 (src line 131)
+	SPACE  shift 75
+	.  error
 
 
 state 65
-	second:  DIGIT.DIGIT 
-	second:  DIGIT.    (29)
+	rfc822:  day SPACE MONTH SPACE year2 SPACE.time SPACE ZONE 
+	rfc822z:  day SPACE MONTH SPACE year2 SPACE.time SPACE offest 
 
-	DIGIT  shift 72
-	.  reduce 29 (src line 163)
+	DIGIT  shift 32
+	.  error
 
+	time  goto 76
+	hour  goto 31
 
 state 66
-	date:  year HANYEAR month HANMONTH day HANDAY.    (8)
+	year2:  DIGIT DIGIT.    (22)
 
-	.  reduce 8 (src line 68)
+	.  reduce 22 (src line 164)
 
 
 state 67
-	year:  DIGIT DIGIT.DIGIT DIGIT 
+	offest:  PLUS DIGIT.DIGIT DIGIT DIGIT 
+	offest:  PLUS DIGIT.DIGIT COLON DIGIT DIGIT 
+	offest:  PLUS DIGIT.DIGIT 
 
-	DIGIT  shift 38
+	DIGIT  shift 77
 	.  error
 
 
 state 68
-	year:  DIGIT DIGIT.DIGIT DIGIT 
-	year2:  DIGIT DIGIT.    (16)
+	offest:  DASH DIGIT.DIGIT DIGIT DIGIT 
+	offest:  DASH DIGIT.DIGIT COLON DIGIT DIGIT 
+	offest:  DASH DIGIT.DIGIT 
 
-	DIGIT  shift 38
-	.  reduce 16 (src line 104)
+	DIGIT  shift 78
+	.  error
 
 
 state 69
-	date:  MONTH SPACE day COMMA SPACE year.    (13)
+	offest:  DIGIT DIGIT.COLON DIGIT DIGIT 
 
-	.  reduce 13 (src line 88)
+	COLON  shift 79
+	.  error
 
 
 state 70
-	date:  MONTH DOT SPACE day COMMA SPACE.year 
+	time:  hour COLON minute COLON.second 
+	time:  hour COLON minute COLON.second DOT millisecond 
 
-	DIGIT  shift 58
+	DIGIT  shift 81
 	.  error
 
-	year  goto 73
+	second  goto 80
 
 state 71
-	time:  hour COLON minute COLON second COLON.millisecond 
+	minute:  DIGIT DIGIT.    (39)
 
-	DIGIT  shift 75
-	.  error
+	.  reduce 39 (src line 232)
 
-	millisecond  goto 74
 
 state 72
-	second:  DIGIT DIGIT.    (28)
+	rfc1123z:  WEEK COMMA SPACE day SPACE.MONTH SPACE year4 SPACE time SPACE offest 
 
-	.  reduce 28 (src line 159)
+	MONTH  shift 82
+	.  error
 
 
 state 73
-	date:  MONTH DOT SPACE day COMMA SPACE year.    (14)
+	ansic:  WEEK SPACE MONTH SPACE day SPACE time.SPACE year4 
+	unixdate:  WEEK SPACE MONTH SPACE day SPACE time.SPACE ZONE SPACE year4 
+	rubydate:  WEEK SPACE MONTH SPACE day SPACE time.SPACE offest SPACE year4 
 
-	.  reduce 14 (src line 93)
+	SPACE  shift 83
+	.  error
 
 
 state 74
-	time:  hour COLON minute COLON second COLON millisecond.    (23)
+	rfc850:  WEEK COMMA SPACE day DASH MONTH DASH.year2 SPACE time SPACE ZONE 
 
-	.  reduce 23 (src line 135)
+	DIGIT  shift 53
+	.  error
 
+	year2  goto 84
 
 state 75
-	millisecond:  DIGIT.    (30)
+	rfc1123:  WEEK COMMA SPACE day SPACE MONTH SPACE.year4 SPACE time SPACE ZONE 
+
+	DIGIT  shift 86
+	.  error
+
+	year4  goto 85
+
+state 76
+	rfc822:  day SPACE MONTH SPACE year2 SPACE time.SPACE ZONE 
+	rfc822z:  day SPACE MONTH SPACE year2 SPACE time.SPACE offest 
+
+	SPACE  shift 87
+	.  error
+
+
+state 77
+	offest:  PLUS DIGIT DIGIT.DIGIT DIGIT 
+	offest:  PLUS DIGIT DIGIT.COLON DIGIT DIGIT 
+	offest:  PLUS DIGIT DIGIT.    (35)
+
+	DIGIT  shift 88
+	COLON  shift 89
+	.  reduce 35 (src line 216)
+
+
+state 78
+	offest:  DASH DIGIT DIGIT.DIGIT DIGIT 
+	offest:  DASH DIGIT DIGIT.COLON DIGIT DIGIT 
+	offest:  DASH DIGIT DIGIT.    (36)
+
+	DIGIT  shift 90
+	COLON  shift 91
+	.  reduce 36 (src line 219)
+
+
+state 79
+	offest:  DIGIT DIGIT COLON.DIGIT DIGIT 
+
+	DIGIT  shift 92
+	.  error
+
+
+state 80
+	time:  hour COLON minute COLON second.    (28)
+	time:  hour COLON minute COLON second.DOT millisecond 
+
+	DOT  shift 93
+	.  reduce 28 (src line 191)
+
+
+state 81
+	second:  DIGIT.DIGIT 
+	second:  DIGIT.    (42)
+
+	DIGIT  shift 94
+	.  reduce 42 (src line 245)
+
+
+state 82
+	rfc1123z:  WEEK COMMA SPACE day SPACE MONTH.SPACE year4 SPACE time SPACE offest 
+
+	SPACE  shift 95
+	.  error
+
+
+state 83
+	ansic:  WEEK SPACE MONTH SPACE day SPACE time SPACE.year4 
+	unixdate:  WEEK SPACE MONTH SPACE day SPACE time SPACE.ZONE SPACE year4 
+	rubydate:  WEEK SPACE MONTH SPACE day SPACE time SPACE.offest SPACE year4 
+
+	DASH  shift 56
+	DIGIT  shift 99
+	PLUS  shift 55
+	ZONE  shift 97
+	.  error
+
+	year4  goto 96
+	offest  goto 98
+
+state 84
+	rfc850:  WEEK COMMA SPACE day DASH MONTH DASH year2.SPACE time SPACE ZONE 
+
+	SPACE  shift 100
+	.  error
+
+
+state 85
+	rfc1123:  WEEK COMMA SPACE day SPACE MONTH SPACE year4.SPACE time SPACE ZONE 
+
+	SPACE  shift 101
+	.  error
+
+
+state 86
+	year4:  DIGIT.DIGIT DIGIT DIGIT 
+
+	DIGIT  shift 102
+	.  error
+
+
+state 87
+	rfc822:  day SPACE MONTH SPACE year2 SPACE time SPACE.ZONE 
+	rfc822z:  day SPACE MONTH SPACE year2 SPACE time SPACE.offest 
+
+	DASH  shift 56
+	DIGIT  shift 57
+	PLUS  shift 55
+	ZONE  shift 103
+	.  error
+
+	offest  goto 104
+
+state 88
+	offest:  PLUS DIGIT DIGIT DIGIT.DIGIT 
+
+	DIGIT  shift 105
+	.  error
+
+
+state 89
+	offest:  PLUS DIGIT DIGIT COLON.DIGIT DIGIT 
+
+	DIGIT  shift 106
+	.  error
+
+
+state 90
+	offest:  DASH DIGIT DIGIT DIGIT.DIGIT 
+
+	DIGIT  shift 107
+	.  error
+
+
+state 91
+	offest:  DASH DIGIT DIGIT COLON.DIGIT DIGIT 
+
+	DIGIT  shift 108
+	.  error
+
+
+state 92
+	offest:  DIGIT DIGIT COLON DIGIT.DIGIT 
+
+	DIGIT  shift 109
+	.  error
+
+
+state 93
+	time:  hour COLON minute COLON second DOT.millisecond 
+
+	DIGIT  shift 111
+	.  error
+
+	millisecond  goto 110
+
+state 94
+	second:  DIGIT DIGIT.    (41)
+
+	.  reduce 41 (src line 241)
+
+
+state 95
+	rfc1123z:  WEEK COMMA SPACE day SPACE MONTH SPACE.year4 SPACE time SPACE offest 
+
+	DIGIT  shift 86
+	.  error
+
+	year4  goto 112
+
+state 96
+	ansic:  WEEK SPACE MONTH SPACE day SPACE time SPACE year4.    (11)
+
+	.  reduce 11 (src line 83)
+
+
+state 97
+	unixdate:  WEEK SPACE MONTH SPACE day SPACE time SPACE ZONE.SPACE year4 
+
+	SPACE  shift 113
+	.  error
+
+
+state 98
+	rubydate:  WEEK SPACE MONTH SPACE day SPACE time SPACE offest.SPACE year4 
+
+	SPACE  shift 114
+	.  error
+
+
+state 99
+	year4:  DIGIT.DIGIT DIGIT DIGIT 
+	offest:  DIGIT.DIGIT COLON DIGIT DIGIT 
+
+	DIGIT  shift 115
+	.  error
+
+
+state 100
+	rfc850:  WEEK COMMA SPACE day DASH MONTH DASH year2 SPACE.time SPACE ZONE 
+
+	DIGIT  shift 32
+	.  error
+
+	time  goto 116
+	hour  goto 31
+
+state 101
+	rfc1123:  WEEK COMMA SPACE day SPACE MONTH SPACE year4 SPACE.time SPACE ZONE 
+
+	DIGIT  shift 32
+	.  error
+
+	time  goto 117
+	hour  goto 31
+
+state 102
+	year4:  DIGIT DIGIT.DIGIT DIGIT 
+
+	DIGIT  shift 33
+	.  error
+
+
+state 103
+	rfc822:  day SPACE MONTH SPACE year2 SPACE time SPACE ZONE.    (14)
+
+	.  reduce 14 (src line 107)
+
+
+state 104
+	rfc822z:  day SPACE MONTH SPACE year2 SPACE time SPACE offest.    (15)
+
+	.  reduce 15 (src line 115)
+
+
+state 105
+	offest:  PLUS DIGIT DIGIT DIGIT DIGIT.    (30)
+
+	.  reduce 30 (src line 201)
+
+
+state 106
+	offest:  PLUS DIGIT DIGIT COLON DIGIT.DIGIT 
+
+	DIGIT  shift 118
+	.  error
+
+
+state 107
+	offest:  DASH DIGIT DIGIT DIGIT DIGIT.    (31)
+
+	.  reduce 31 (src line 204)
+
+
+state 108
+	offest:  DASH DIGIT DIGIT COLON DIGIT.DIGIT 
+
+	DIGIT  shift 119
+	.  error
+
+
+state 109
+	offest:  DIGIT DIGIT COLON DIGIT DIGIT.    (34)
+
+	.  reduce 34 (src line 213)
+
+
+state 110
+	time:  hour COLON minute COLON second DOT millisecond.    (29)
+
+	.  reduce 29 (src line 195)
+
+
+state 111
+	millisecond:  DIGIT.    (43)
 	millisecond:  DIGIT.DIGIT 
 	millisecond:  DIGIT.DIGIT DIGIT 
 	millisecond:  DIGIT.DIGIT DIGIT DIGIT 
 	millisecond:  DIGIT.DIGIT DIGIT DIGIT DIGIT 
 	millisecond:  DIGIT.DIGIT DIGIT DIGIT DIGIT DIGIT 
+	millisecond:  DIGIT.DIGIT DIGIT DIGIT DIGIT DIGIT DIGIT DIGIT DIGIT 
 
-	DIGIT  shift 76
-	.  reduce 30 (src line 168)
+	DIGIT  shift 120
+	.  reduce 43 (src line 250)
 
 
-state 76
-	millisecond:  DIGIT DIGIT.    (31)
+state 112
+	rfc1123z:  WEEK COMMA SPACE day SPACE MONTH SPACE year4.SPACE time SPACE offest 
+
+	SPACE  shift 121
+	.  error
+
+
+state 113
+	unixdate:  WEEK SPACE MONTH SPACE day SPACE time SPACE ZONE SPACE.year4 
+
+	DIGIT  shift 86
+	.  error
+
+	year4  goto 122
+
+state 114
+	rubydate:  WEEK SPACE MONTH SPACE day SPACE time SPACE offest SPACE.year4 
+
+	DIGIT  shift 86
+	.  error
+
+	year4  goto 123
+
+state 115
+	year4:  DIGIT DIGIT.DIGIT DIGIT 
+	offest:  DIGIT DIGIT.COLON DIGIT DIGIT 
+
+	DIGIT  shift 33
+	COLON  shift 79
+	.  error
+
+
+state 116
+	rfc850:  WEEK COMMA SPACE day DASH MONTH DASH year2 SPACE time.SPACE ZONE 
+
+	SPACE  shift 124
+	.  error
+
+
+state 117
+	rfc1123:  WEEK COMMA SPACE day SPACE MONTH SPACE year4 SPACE time.SPACE ZONE 
+
+	SPACE  shift 125
+	.  error
+
+
+state 118
+	offest:  PLUS DIGIT DIGIT COLON DIGIT DIGIT.    (32)
+
+	.  reduce 32 (src line 207)
+
+
+state 119
+	offest:  DASH DIGIT DIGIT COLON DIGIT DIGIT.    (33)
+
+	.  reduce 33 (src line 210)
+
+
+state 120
+	millisecond:  DIGIT DIGIT.    (44)
 	millisecond:  DIGIT DIGIT.DIGIT 
 	millisecond:  DIGIT DIGIT.DIGIT DIGIT 
 	millisecond:  DIGIT DIGIT.DIGIT DIGIT DIGIT 
 	millisecond:  DIGIT DIGIT.DIGIT DIGIT DIGIT DIGIT 
+	millisecond:  DIGIT DIGIT.DIGIT DIGIT DIGIT DIGIT DIGIT DIGIT DIGIT 
 
-	DIGIT  shift 77
-	.  reduce 31 (src line 172)
+	DIGIT  shift 126
+	.  reduce 44 (src line 254)
 
 
-state 77
-	millisecond:  DIGIT DIGIT DIGIT.    (32)
+state 121
+	rfc1123z:  WEEK COMMA SPACE day SPACE MONTH SPACE year4 SPACE.time SPACE offest 
+
+	DIGIT  shift 32
+	.  error
+
+	time  goto 127
+	hour  goto 31
+
+state 122
+	unixdate:  WEEK SPACE MONTH SPACE day SPACE time SPACE ZONE SPACE year4.    (12)
+
+	.  reduce 12 (src line 91)
+
+
+state 123
+	rubydate:  WEEK SPACE MONTH SPACE day SPACE time SPACE offest SPACE year4.    (13)
+
+	.  reduce 13 (src line 99)
+
+
+state 124
+	rfc850:  WEEK COMMA SPACE day DASH MONTH DASH year2 SPACE time SPACE.ZONE 
+
+	ZONE  shift 128
+	.  error
+
+
+state 125
+	rfc1123:  WEEK COMMA SPACE day SPACE MONTH SPACE year4 SPACE time SPACE.ZONE 
+
+	ZONE  shift 129
+	.  error
+
+
+state 126
+	millisecond:  DIGIT DIGIT DIGIT.    (45)
 	millisecond:  DIGIT DIGIT DIGIT.DIGIT 
 	millisecond:  DIGIT DIGIT DIGIT.DIGIT DIGIT 
 	millisecond:  DIGIT DIGIT DIGIT.DIGIT DIGIT DIGIT 
+	millisecond:  DIGIT DIGIT DIGIT.DIGIT DIGIT DIGIT DIGIT DIGIT DIGIT 
 
-	DIGIT  shift 78
-	.  reduce 32 (src line 176)
+	DIGIT  shift 130
+	.  reduce 45 (src line 258)
 
 
-state 78
-	millisecond:  DIGIT DIGIT DIGIT DIGIT.    (33)
+state 127
+	rfc1123z:  WEEK COMMA SPACE day SPACE MONTH SPACE year4 SPACE time.SPACE offest 
+
+	SPACE  shift 131
+	.  error
+
+
+state 128
+	rfc850:  WEEK COMMA SPACE day DASH MONTH DASH year2 SPACE time SPACE ZONE.    (16)
+
+	.  reduce 16 (src line 123)
+
+
+state 129
+	rfc1123:  WEEK COMMA SPACE day SPACE MONTH SPACE year4 SPACE time SPACE ZONE.    (17)
+
+	.  reduce 17 (src line 131)
+
+
+state 130
+	millisecond:  DIGIT DIGIT DIGIT DIGIT.    (46)
 	millisecond:  DIGIT DIGIT DIGIT DIGIT.DIGIT 
 	millisecond:  DIGIT DIGIT DIGIT DIGIT.DIGIT DIGIT 
+	millisecond:  DIGIT DIGIT DIGIT DIGIT.DIGIT DIGIT DIGIT DIGIT DIGIT 
 
-	DIGIT  shift 79
-	.  reduce 33 (src line 180)
+	DIGIT  shift 132
+	.  reduce 46 (src line 262)
 
 
-state 79
-	millisecond:  DIGIT DIGIT DIGIT DIGIT DIGIT.    (34)
+state 131
+	rfc1123z:  WEEK COMMA SPACE day SPACE MONTH SPACE year4 SPACE time SPACE.offest 
+
+	DASH  shift 56
+	DIGIT  shift 57
+	PLUS  shift 55
+	.  error
+
+	offest  goto 133
+
+state 132
+	millisecond:  DIGIT DIGIT DIGIT DIGIT DIGIT.    (47)
 	millisecond:  DIGIT DIGIT DIGIT DIGIT DIGIT.DIGIT 
+	millisecond:  DIGIT DIGIT DIGIT DIGIT DIGIT.DIGIT DIGIT DIGIT DIGIT 
 
-	DIGIT  shift 80
-	.  reduce 34 (src line 184)
-
-
-state 80
-	millisecond:  DIGIT DIGIT DIGIT DIGIT DIGIT DIGIT.    (35)
-
-	.  reduce 35 (src line 188)
+	DIGIT  shift 134
+	.  reduce 47 (src line 266)
 
 
-17 terminals, 13 nonterminals
-36 grammar rules, 81/8000 states
+state 133
+	rfc1123z:  WEEK COMMA SPACE day SPACE MONTH SPACE year4 SPACE time SPACE offest.    (18)
+
+	.  reduce 18 (src line 139)
+
+
+state 134
+	millisecond:  DIGIT DIGIT DIGIT DIGIT DIGIT DIGIT.    (48)
+	millisecond:  DIGIT DIGIT DIGIT DIGIT DIGIT DIGIT.DIGIT DIGIT DIGIT 
+
+	DIGIT  shift 135
+	.  reduce 48 (src line 270)
+
+
+state 135
+	millisecond:  DIGIT DIGIT DIGIT DIGIT DIGIT DIGIT DIGIT.DIGIT DIGIT 
+
+	DIGIT  shift 136
+	.  error
+
+
+state 136
+	millisecond:  DIGIT DIGIT DIGIT DIGIT DIGIT DIGIT DIGIT DIGIT.DIGIT 
+
+	DIGIT  shift 137
+	.  error
+
+
+state 137
+	millisecond:  DIGIT DIGIT DIGIT DIGIT DIGIT DIGIT DIGIT DIGIT DIGIT.    (49)
+
+	.  reduce 49 (src line 274)
+
+
+24 terminals, 23 nonterminals
+50 grammar rules, 138/8000 states
 0 shift/reduce, 0 reduce/reduce conflicts reported
-62 working sets used
-memory: parser 29/120000
-4 extra closures
-69 shift entries, 5 exceptions
-29 goto entries
-1 entries saved by goto default
-Optimizer space used: output 80/120000
-80 table entries, 0 zero
-maximum spread: 17, maximum offset: 70
+72 working sets used
+memory: parser 44/120000
+47 extra closures
+124 shift entries, 1 exceptions
+40 goto entries
+5 entries saved by goto default
+Optimizer space used: output 145/120000
+145 table entries, 0 zero
+maximum spread: 24, maximum offset: 131

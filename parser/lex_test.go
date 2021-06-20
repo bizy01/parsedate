@@ -60,6 +60,12 @@ var tests = []struct {
 					{SPACE, 0, " "},
 				},
 			},
+			{
+				input:    "+",
+				expected: []Token{
+					{PLUS, 0, "+"},
+				},
+			},
             {
 				input: "2=",
 				fail: true,
@@ -291,6 +297,62 @@ var tests = []struct {
 			{
 				input:    "Dec",
 				expected: []Token{{MONTH, 0, "Dec"}},
+			},
+			{
+				input:    "Mon",
+				expected: []Token{{WEEK, 0, "Mon"}},
+			},
+			{
+				input:    "Tue",
+				expected: []Token{{WEEK, 0, "Tue"}},
+			},
+			{
+				input:    "Wed",
+				expected: []Token{{WEEK, 0, "Wed"}},
+			},
+			{
+				input:    "Thur",
+				expected: []Token{{WEEK, 0, "Thur"}},
+			},
+			{
+				input:    "Fri",
+				expected: []Token{{WEEK, 0, "Fri"}},
+			},
+			{
+				input:    "Sat",
+				expected: []Token{{WEEK, 0, "Sat"}},
+			},
+			{
+				input:    "Sun",
+				expected: []Token{{WEEK, 0, "Sun"}},
+			},
+			{
+				input:    "Monday",
+				expected: []Token{{WEEK, 0, "Monday"}},
+			},
+			{
+				input:    "Tuesday",
+				expected: []Token{{WEEK, 0, "Tuesday"}},
+			},
+			{
+				input:    "Wednesday",
+				expected: []Token{{WEEK, 0, "Wednesday"}},
+			},
+			{
+				input:    "Thursday",
+				expected: []Token{{WEEK, 0, "Thursday"}},
+			},
+			{
+				input:    "Friday",
+				expected: []Token{{WEEK, 0, "Friday"}},
+			},
+			{
+				input:    "Saturday",
+				expected: []Token{{WEEK, 0, "Saturday"}},
+			},
+			{
+				input:    "Sunday",
+				expected: []Token{{WEEK, 0, "Sunday"}},
 			},
 			{
 				input:    "oct 7, 1970",

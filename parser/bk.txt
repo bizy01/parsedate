@@ -1,0 +1,70 @@
+datetime: date
+  {
+    y := $1.(*Date)
+    $$ = &DateTime{Year: y.Year , Month: y.Month, Day: y.Day}
+  }
+| time
+  {
+    t := $1.(*Time)
+    $$ = &DateTime{Hour: t.Hour, Minute: t.Minute, Second: t.Second}
+  }
+| date SPACE time
+  {
+    y := $1.(*Date)
+
+    $$ = &DateTime{Year: y.Year, Month: y.Month, Day: y.Day, Hour: t.Hour, Minute: t.Minute, Second: t.Second}
+  }
+
+## unixdate time (Mon Jan _2 15:04:05 MST 2006)
+unixdate: week SPACE MONTH SPACE SPACE day1 SPACE time SPACE ZONE SPACE year4
+  {
+
+  }
+
+## rubydate time (Mon Jan 02 15:04:05 -0700 2006)
+rubydate: week SPACE MONTH SPACE SPACE day2 SPACE time SPACE offest SPACE year4
+  {
+
+  }
+
+## rfc822 (02 Jan 06 15:04 MST)
+rfc822: day2 SPACE MONTH SPACE year2 SPACE time SPACE ZONE
+  {
+    # rfc850
+  }
+
+## RFC822Z (02 Jan 06 15:04 -0700)
+rfc822z: day2 SPACE MONTH SPACE year2 SPACE time SPACE offest
+  {
+    # rfc850
+  }
+
+## rfc850 (Monday, 02-Jan-06 15:04:05 MST)
+rfc850: week COMMA SPACE day2 DASH MONTH DASH year2 SPACE time SPACE ZONE
+  {
+    # rfc850
+  }
+
+## RFC1123 (Mon, 02 Jan 2006 15:04:05 MST)
+rfc1123: week COMMA SPACE day2 SPACE MONTH SPACE year4 SPACE time SPACE ZONE
+  {
+    # rfc850
+  }
+
+## RFC1123Z (Mon, 02 Jan 2006 15:04:05 -0700)
+rfc1123: week COMMA SPACE day2 SPACE MONTH SPACE year4 SPACE time SPACE offest
+  {
+    # rfc850
+  }
+
+# RFC3339 (2006-01-02T15:04:05Z07:00)
+rfc3339: year SPACE month SPACE day
+  {
+
+  }
+
+## RFC3339Nano (2006-01-02T15:04:05.999999999Z07:00)
+rfc3339Nano: year SPACE month SPACE day
+  {
+
+  }

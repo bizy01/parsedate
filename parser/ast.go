@@ -202,32 +202,6 @@ func (s Millisecond) PositionRange() *PositionRange{
     return nil
 }
 
-var monthWords = map[string]int {
-    "january":      1,
-    "february":     2,
-    "march":        3,
-    "april":        4,
-    "may":          5,
-    "june":         6,
-    "july":         7,
-    "august":       8,
-    "september":    9,
-    "october":      10,
-    "november":     11,
-    "december":     12,
-    "jan":          1,
-    "feb":          2,
-    "mar":          3,
-    "apr":          4,
-    "jun":          6,
-    "jul":          7,
-    "aug":          8,
-    "sept":         9,
-    "oct":          10,
-    "nov":          11,
-    "dec":          12,
-}
-
 func ConvToManth(m string) Month {
 	if month, ok := monthWords[strings.ToLower(m)]; ok {
 		return Month(month)
